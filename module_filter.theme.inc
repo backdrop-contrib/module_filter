@@ -104,7 +104,9 @@ function theme_module_filter_system_modules_tabs($variables) {
       }
       $row[] = array('class' => array('name'), 'data' => $label . '><strong>' . drupal_render($module['name']) . '</strong> <span class="module-machine-name">(' . $key . ')</span></label>');
 
-      if (variable_get('module_filter_version_column', 0) && $version) {
+      if (variable_get('module_filter_version_column', 0)) {
+        // Need something in the array slot, even if version is empty, otherwise
+        // the rest of the cells are shifted to the left.
         $row[] = array('class' => array('version'), 'data' => drupal_render($module['version']));
       }
 
