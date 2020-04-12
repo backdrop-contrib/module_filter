@@ -169,7 +169,7 @@ function theme_module_filter_system_modules_tabs($variables) {
 
   $output = '<div id="module-filter-wrapper">';
   $output .= '<div id="module-filter-modules">' . drupal_render($form['module_filter']);
-  $output .= theme('table', array('header' => $header, 'rows' => $rows));
+  $output .= theme('table__module_filter_system_modules_tabs', array('header' => $header, 'rows' => $rows));
   $output .= drupal_render_children($form);
   $output .= '</div>';
   $output .= '</div>';
