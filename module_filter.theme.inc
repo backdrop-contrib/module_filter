@@ -2,10 +2,14 @@
 
 /**
  * @file
+ * File for theme functions.
  *
  * @author greenSkin
  */
 
+/**
+ * Function theme_module_filter().
+ */
 function theme_module_filter($variables) {
   $element = $variables['element'];
   return '<div class="module-filter-inputs-wrapper">' . drupal_render_children($element) . '</div>';
@@ -31,15 +35,15 @@ function theme_module_filter_system_modules_tabs($variables) {
     $form['actions']['#suffix'] = '</div>';
   }
 
-  $header = array(
-    array('data' => '', 'class' => array('checkbox')),
-    array('data' => t('Name'), 'class' => array('name')),
-    array('data' => t('Description'), 'class' => array('description')),
-    array('data' => t('Links'), 'class' => array('links')),
-  );
+  $header = array();
+  $header[] = array('data' => '', 'class' => array('checkbox'));
+  $header[] = array('data' => t('Name'), 'class' => array('name'));
   if (variable_get('module_filter_version_column', 0)) {
-    array_splice($header, 2, 0, array(array('data' => t('Version'), 'class' => array('version'))));
+    $header[] = array('data' => t('Version'), 'class' => array('version'));
   }
+  $header[] = array('data' => t('Description'), 'class' => array('description'));
+  $header[] = array('data' => t('Links'), 'class' => array('links'));
+
   $package_ids = array('all');
   $enabled['all'] = array();
 
@@ -64,7 +68,16 @@ function theme_module_filter_system_modules_tabs($variables) {
     $package_ids[] = $package_id;
 
     // Package title and header.
-    $rows[] = array('data' => array(array('data' => '<h3>' . $form['modules'][$package]['#title'] . '</h3>', 'colspan' => 4)), 'id' => $package_id . '-package', 'class' => array('admin-package-title'));
+    $rows[] = array(
+      'data' => array(
+        array(
+          'data' => '<h3>' . $form['modules'][$package]['#title'] . '</h3>',
+          'colspan' => 4,
+        ),
+      ),
+      'id' => $package_id . '-package',
+      'class' => array('admin-package-title'),
+    );
     $rows[] = array('data' => $header, 'class' => array('admin-package-header'));
 
     $stripe = 'odd';
@@ -84,6 +97,8 @@ function theme_module_filter_system_modules_tabs($variables) {
       $row = array();
 
       $version = !empty($module['version']['#markup']);
+      $version_column = variable_get('module_filter_version_column', 0);
+      $show_path = variable_get('module_filter_show_path', 0);
       $requires = !empty($module['#requires']);
       $required_by = !empty($module['#required_by']);
 
@@ -115,10 +130,14 @@ function theme_module_filter_system_modules_tabs($variables) {
         $module['description']['#markup'] = '<em>' . t('No description available.') . '</em>';
       }
       $description = '<span class="details"><span class="text">' . drupal_render($module['description']) . '</span></span>';
-      if ($requires || $required_by || (!variable_get('module_filter_version_column', 0) && $version)) {
+      if (($version && !$version_column) || $show_path || $requires || $required_by) {
         $description .= '<div class="requirements">';
-        if (!variable_get('module_filter_version_column', 0) && $version) {
+        if ($version && !$version_column) {
           $description .= '<div class="admin-requirements">' . t('Version: !module-version', array('!module-version' => drupal_render($module['version']))) . '</div>';
+        }
+        if ($show_path) {
+          $module_path = drupal_get_path('module', $key);
+          $description .= '<div class="admin-requirements path" title="' . $module_path . '">' . t('Path: !module-path', array('!module-path' => $module_path)) . '</div>';
         }
         if ($requires) {
           $description .= '<div class="admin-requirements">' . t('Requires: !module-list', array('!module-list' => implode(', ', $module['#requires']))) . '</div>';
@@ -148,7 +167,7 @@ function theme_module_filter_system_modules_tabs($variables) {
     $form['modules'][$package]['#printed'] = TRUE;
   }
 
-  //Get packages and count number of modules
+  // Get packages and count number of modules.
   $enabled_counts = array();
   foreach ($enabled as $package_id => $value) {
     $enabled_counts[$package_id] = array(
@@ -160,7 +179,7 @@ function theme_module_filter_system_modules_tabs($variables) {
     'moduleFilter' => array(
       'packageIDs' => $package_ids,
       'enabledCounts' => $enabled_counts,
-    )
+    ),
   ), 'setting');
 
   // Add first and last class to rows.
@@ -178,8 +197,10 @@ function theme_module_filter_system_modules_tabs($variables) {
 
 /**
  * Theme function for module filter operations.
+ *
  * @param $variables
- * @return
+ *
+ * @return string
  *   HTML for admin status operations.
  */
 function theme_module_filter_operations(&$vars) {
@@ -209,8 +230,19 @@ function theme_module_filter_operations(&$vars) {
   }
   if (!empty($operations)) {
     if ($dropbutton) {
-      return '<div class="admin-operations">' . theme('links__ctools_dropbutton', array('title' => t('Operations'), 'links' => $operations, 'attributes' => array('class' => array('links')))) . '</div>';
+      return '<div class="admin-operations">' . theme('links__ctools_dropbutton', array(
+        'title' => t('Operations'),
+        'links' => $operations,
+        'attributes' => array(
+          'class' => array('links'),
+        ),
+      )) . '</div>';
     }
-    return '<div class="admin-operations">' . theme('item_list', array('items' => $operations, 'attributes' => array('class' => array('links', 'inline')))) . '</div>';
+    return '<div class="admin-operations">' . theme('item_list', array(
+      'items' => $operations,
+      'attributes' => array(
+        'class' => array('links', 'inline'),
+      ),
+    )) . '</div>';
   }
 }

@@ -94,6 +94,12 @@ function module_filter_settings() {
     '#description' => t('When enabled, the description will be expanded by default.'),
     '#default_value' => variable_get('module_filter_expanded_description', 0),
   );
+  $form['tabs']['module_filter_show_path'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show module path in modules list'),
+    '#description' => t('If enabled, the relative path of each module will display in its row.'),
+    '#default_value' => variable_get('module_filter_show_path', 0),
+  );
 
   $form['update'] = array(
     '#type' => 'fieldset',
