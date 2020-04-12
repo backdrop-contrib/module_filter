@@ -58,6 +58,7 @@ function theme_module_filter_system_modules_tabs($variables) {
 
   // Determine what modules are new (within a week).
   $new_modules = module_filter_new_modules();
+  $module_data = system_rebuild_module_data();
   $package_ids[] = 'new';
   $enabled['new'] = array();
 
@@ -138,6 +139,11 @@ function theme_module_filter_system_modules_tabs($variables) {
         if ($show_path) {
           $module_path = drupal_get_path('module', $key);
           $description .= '<div class="admin-requirements path" title="' . $module_path . '">' . t('Path: !module-path', array('!module-path' => $module_path)) . '</div>';
+        }
+
+        // Display schema version for enabled modules.
+        if (!empty($module_data[$key]->status) && !empty($module_data[$key]->schema_version)) {
+          $description .= '<div class="admin-requirements">' . t('Schema version: @schema_version', array('@schema_version' => $module_data[$key]->schema_version)) . '</div>';
         }
         if ($requires) {
           $description .= '<div class="admin-requirements">' . t('Requires: !module-list', array('!module-list' => implode(', ', $module['#requires']))) . '</div>';
