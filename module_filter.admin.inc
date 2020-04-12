@@ -107,6 +107,12 @@ function module_filter_settings() {
     '#collapsible' => TRUE,
     '#collapsed' => (module_exists('update')) ? FALSE : TRUE,
   );
+  $form['update']['module_filter_update_status_alter'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enhance Update Status Report'),
+    '#description' => t('Allow module filter module to make enhancements to the update status report.'),
+    '#default_value' => variable_get('module_filter_update_status_alter', 1),
+  );
   $form['update']['module_filter_remember_update_state'] = array(
     '#type' => 'checkbox',
     '#title' => t('Remember the last selected filter.'),

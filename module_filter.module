@@ -63,7 +63,7 @@ function module_filter_menu() {
  * Implements hook_menu_alter().
  */
 function module_filter_menu_alter(&$items) {
-  if (isset($items['admin/reports/updates'])) {
+  if (variable_get('module_filter_update_status_alter', 1) && isset($items['admin/reports/updates'])) {
     // We route the updates report page through us.
     $items['admin/reports/updates']['page callback'] = 'module_filter_update_status';
     $items['admin/reports/updates']['file'] = 'module_filter.pages.inc';

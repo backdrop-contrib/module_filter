@@ -22,6 +22,7 @@ function module_filter_uninstall() {
   variable_del('module_filter_remember_update_state');
   variable_del('module_filter_version_column');
   variable_del('module_filter_expanded_description');
+  variable_del('module_filter_update_status_alter');
 }
 
 /**
