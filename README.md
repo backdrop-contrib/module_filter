@@ -1,4 +1,4 @@
-MOdule Filter
+Module Filter
 =============
 
 This module provides a method for filtering modules on the modules page as well
