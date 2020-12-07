@@ -1,0 +1,19 @@
+{
+    "_config_name": "module_filter.settings",
+    "_config_static": true,
+    "set_focus": 1,
+    "tabs": 1,
+    "count_enabled": 1,
+    "visual_aid": 1,
+    "hide_empty_tabs": 0,
+    "dynamic_save_position": 0,
+    "use_url_fragment": 1,
+    "use_switch": 1,
+    "track_recent_modules": 1,
+    "version_column": 0,
+    "expanded_description": 0,
+    "show_path": 0,
+    "status_alter": 1,
+    "remember_active_tag": 0,
+    "remember_update_state": 0
+}

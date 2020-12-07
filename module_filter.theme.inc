@@ -12,13 +12,14 @@
  */
 function theme_module_filter($variables) {
   $element = $variables['element'];
-  return '<div class="module-filter-inputs-wrapper">' . drupal_render_children($element) . '</div>';
+  return '<div class="module-filter-inputs-wrapper">' . backdrop_render_children($element) . '</div>';
 }
 
 /**
  * Theme callback for the modules tabbed form.
  */
 function theme_module_filter_system_modules_tabs($variables) {
+  $config = config('module_filter');
   if (module_exists('views_ui')) {
     // Hack to get consistent style with views ctools dropbutton.
     if (module_load_include('inc', 'views_ui', 'includes/admin')) {
@@ -38,7 +39,7 @@ function theme_module_filter_system_modules_tabs($variables) {
   $header = array();
   $header[] = array('data' => '', 'class' => array('checkbox'));
   $header[] = array('data' => t('Name'), 'class' => array('name'));
-  if (variable_get('module_filter_version_column', 0)) {
+  if ($config->get('version_column')) {
     $header[] = array('data' => t('Version'), 'class' => array('version'));
   }
   $header[] = array('data' => t('Description'), 'class' => array('description'));
@@ -47,10 +48,10 @@ function theme_module_filter_system_modules_tabs($variables) {
   $package_ids = array('all');
   $enabled['all'] = array();
 
-  if (variable_get('module_filter_track_recent_modules', 1)) {
-    $recent_modules = array_filter(variable_get('module_filter_recent_modules', array()), 'module_filter_recent_filter');
+  if ($config->get('track_recent_modules')) {
+    $recent_modules = array_filter($config->get('recent_modules'), 'module_filter_recent_filter');
     // Save the filtered results.
-    variable_set('module_filter_recent_modules', $recent_modules);
+    $config->set('recent_modules', $recent_modules);
 
     $package_ids[] = 'recent';
     $enabled['recent'] = array();
@@ -98,8 +99,8 @@ function theme_module_filter_system_modules_tabs($variables) {
       $row = array();
 
       $version = !empty($module['version']['#markup']);
-      $version_column = variable_get('module_filter_version_column', 0);
-      $show_path = variable_get('module_filter_show_path', 0);
+      $version_column = $config->get('version_column');
+      $show_path = $config->get('show_path');
       $requires = !empty($module['#requires']);
       $required_by = !empty($module['#required_by']);
 
@@ -112,29 +113,29 @@ function theme_module_filter_system_modules_tabs($variables) {
         }
         $toggle_enable = '<div class="js-hide toggle-enable ' . $class . '"><div>&nbsp;</div></div>';
       }
-      $row[] = array('class' => array('checkbox'), 'data' => $toggle_enable . drupal_render($module['enable']));
+      $row[] = array('class' => array('checkbox'), 'data' => $toggle_enable . backdrop_render($module['enable']));
 
       $label = '<label';
       if (isset($module['enable']['#id'])) {
         $label .= ' for="' . $module['enable']['#id'] . '"';
       }
-      $row[] = array('class' => array('name'), 'data' => $label . '><strong>' . drupal_render($module['name']) . '</strong> <span class="module-machine-name">(' . $key . ')</span></label>');
+      $row[] = array('class' => array('name'), 'data' => $label . '><strong>' . backdrop_render($module['name']) . '</strong> <span class="module-machine-name">(' . $key . ')</span></label>');
 
-      if (variable_get('module_filter_version_column', 0)) {
+      if ($config->get('version_column')) {
         // Need something in the array slot, even if version is empty, otherwise
         // the rest of the cells are shifted to the left.
-        $row[] = array('class' => array('version'), 'data' => drupal_render($module['version']));
+        $row[] = array('class' => array('version'), 'data' => backdrop_render($module['version']));
       }
 
       // Add the description, along with any modules it requires.
       if (empty($module['description']['#markup'])) {
         $module['description']['#markup'] = '<em>' . t('No description available.') . '</em>';
       }
-      $description = '<span class="details"><span class="text">' . drupal_render($module['description']) . '</span></span>';
+      $description = '<span class="details"><span class="text">' . backdrop_render($module['description']) . '</span></span>';
       if (($version && !$version_column) || $show_path || $requires || $required_by) {
         $description .= '<div class="requirements">';
         if ($version && !$version_column) {
-          $description .= '<div class="admin-requirements">' . t('Version: !module-version', array('!module-version' => drupal_render($module['version']))) . '</div>';
+          $description .= '<div class="admin-requirements">' . t('Version: !module-version', array('!module-version' => backdrop_render($module['version']))) . '</div>';
         }
         if ($show_path) {
           $module_path = drupal_get_path('module', $key);
@@ -154,9 +155,7 @@ function theme_module_filter_system_modules_tabs($variables) {
         $description .= '</div>';
       }
       $row[] = array('data' => '<div class="inner expand" role="button">' . $description . '</div>', 'class' => array('description'));
-
-      $operations = (module_exists('ctools')) ? theme('module_filter_operations', array('links' => $module['links'], 'dropbutton' => TRUE)) : theme('module_filter_operations', array('links' => $module['links']));
-      $row[] = array('data' => '<div class="links">' . $operations . '</div>', 'class' => array('links'));
+      $row[] = array('data' => '<div class="links">' . backdrop_render($module['links']) . '</div>', 'class' => array('links'));
 
       $class = array(module_filter_get_id($package) . '-tab', 'module', $stripe);
       if (isset($recent_modules[$key])) {
@@ -193,62 +192,11 @@ function theme_module_filter_system_modules_tabs($variables) {
   $rows[count($rows) - 1]['class'][] = 'last';
 
   $output = '<div id="module-filter-wrapper">';
-  $output .= '<div id="module-filter-modules">' . drupal_render($form['module_filter']);
+  $output .= '<div id="module-filter-modules">' . backdrop_render($form['module_filter']);
   $output .= theme('table__module_filter_system_modules_tabs', array('header' => $header, 'rows' => $rows));
-  $output .= drupal_render_children($form);
+  $output .= backdrop_render_children($form);
   $output .= '</div>';
   $output .= '</div>';
   return $output;
 }
 
-/**
- * Theme function for module filter operations.
- *
- * @param $variables
- *
- * @return string
- *   HTML for admin status operations.
- */
-function theme_module_filter_operations(&$vars) {
-  $links = &$vars['links'];
-  $dropbutton = $vars['dropbutton'];
-
-  $operations = array();
-  foreach (element_children($links) as $key) {
-    if ($dropbutton) {
-      hide($links[$key]);
-      if (!empty($links[$key]['#href'])) {
-        $operations[$key] = array(
-          'title' => $links[$key]['#title'],
-          'href' => $links[$key]['#href'],
-        );
-        if (isset($links[$key]['#options'])) {
-          $operations[$key] += $links[$key]['#options'];
-        }
-      }
-    }
-    else {
-      $data = drupal_render($links[$key]);
-      if (!empty($data)) {
-        $operations[$key] = array('data' => $data);
-      }
-    }
-  }
-  if (!empty($operations)) {
-    if ($dropbutton) {
-      return '<div class="admin-operations">' . theme('links__ctools_dropbutton', array(
-        'title' => t('Operations'),
-        'links' => $operations,
-        'attributes' => array(
-          'class' => array('links'),
-        ),
-      )) . '</div>';
-    }
-    return '<div class="admin-operations">' . theme('item_list', array(
-      'items' => $operations,
-      'attributes' => array(
-        'class' => array('links', 'inline'),
-      ),
-    )) . '</div>';
-  }
-}

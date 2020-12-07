@@ -52,7 +52,7 @@ function module_filter_menu() {
     'title' => 'Module filter',
     'description' => 'Configure how the modules page looks and acts.',
     'access arguments' => array('administer module filter'),
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('module_filter_settings'),
     'file' => 'module_filter.admin.inc',
   );
@@ -84,7 +84,7 @@ function module_filter_form_system_modules_alter(&$form, &$form_state, $form_id)
     '#type' => 'module_filter',
     '#attached' => array(
       'js' => array(
-        drupal_get_path('module', 'module_filter') . '/js/modules.js' => array('weight' => 1),
+        backdrop_get_path('module', 'module_filter') . '/js/modules.js' => array('weight' => 1),
       ),
     ),
   );
@@ -103,19 +103,21 @@ function module_filter_form_system_modules_alter(&$form, &$form_state, $form_id)
   );
 
   if (variable_get('module_filter_tabs', 1)) {
-    $form['module_filter']['#attached']['css'][] = drupal_get_path('module', 'module_filter') . '/css/module_filter_tab.css';
-    $form['module_filter']['#attached']['library'][] = array('system', 'jquery.bbq');
-    $form['module_filter']['#attached']['js'][drupal_get_path('module', 'module_filter') . '/js/module_filter_tab.js'] = array('weight' => 2);
+    $form['module_filter']['#attached']['css'][] = backdrop_get_path('module', 'module_filter') . '/css/module_filter_tab.css';
+    $form['module_filter']['#attached']['js'][backdrop_get_path('module', 'module_filter') . '/js/jquery.ba-bbq.js'] = array('weight' => 1);
+    $form['module_filter']['#attached']['js'][backdrop_get_path('module', 'module_filter') . '/js/module_filter_tab.js'] = array('weight' => 2);
 
     if (!module_exists('page_actions') && variable_get('module_filter_dynamic_save_position', 1)) {
-      $form['module_filter']['#attached']['css'][] = drupal_get_path('module', 'module_filter') . '/css/dynamic_position.css';
-      $form['module_filter']['#attached']['js'][drupal_get_path('module', 'module_filter') . '/js/dynamic_position.js'] = array('weight' => 3);
+      $form['module_filter']['#attached']['css'][] = backdrop_get_path('module', 'module_filter') . '/css/dynamic_position.css';
+      $form['module_filter']['#attached']['js'][backdrop_get_path('module', 'module_filter') . '/js/dynamic_position.js'] = array('weight' => 3);
     }
 
-    $form['#attached']['css'][] = drupal_get_path('module', 'module_filter') . '/css/modules.css';
+    $form['#attached']['css'][] = backdrop_get_path('module', 'module_filter') . '/css/modules.css';
 
     $form['#theme'] = 'module_filter_system_modules_tabs';
   }
+
+  unset($form['filter']);
 
   $form['#submit'][] = 'module_filter_system_modules_submit_redirect';
 
@@ -133,7 +135,7 @@ function module_filter_form_user_admin_permissions_alter(&$form, &$form_state) {
     '#description' => t('Filter list by module. Use the query operator "perm" to filter by permission, e.g., perm:access.'),
     '#attached' => array(
       'js' => array(
-        drupal_get_path('module', 'module_filter') . '/js/permissions.js',
+        backdrop_get_path('module', 'module_filter') . '/js/permissions.js',
       ),
     ),
     '#weight' => -100,
@@ -196,11 +198,11 @@ function form_process_module_filter($element, &$form_state) {
     '#attributes' => ((isset($element['#attributes'])) ? $element['#attributes'] : array()) + array('autocomplete' => 'off'),
     '#attached' => array(
       'css' => array(
-        drupal_get_path('module', 'module_filter') . '/css/module_filter.css',
+        backdrop_get_path('module', 'module_filter') . '/css/module_filter.css',
       ),
       'js' => array(
-        'misc/jquery.cookie.js',
-        drupal_get_path('module', 'module_filter') . '/js/module_filter.js',
+        'core/misc/jquery.cookie.js',
+        backdrop_get_path('module', 'module_filter') . '/js/module_filter.js',
         array(
           'data' => array(
             'moduleFilter' => array(
