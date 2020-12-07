@@ -1,5 +1,6 @@
-Description
------------
+MOdule Filter
+=============
+
 This module provides a method for filtering modules on the modules page as well
 as for filtering projects on the update status report.
 
@@ -21,25 +22,25 @@ Update available, Security update, and Unknown. These directly affect the
 visibility of each project; whether it is up-to-date, there is an update
 available, a security update is available, or the status is unknown.
 
+
+Requirements
+------------
+
+This module has no additional requirements.
+
 Installation
 ------------
-To install this module, do the following:
 
-1. Extract the tar ball that you downloaded from Drupal.org.
+- Install this module using the official Backdrop CMS instructions at
+  https://backdropcms.org/guide/modules.
 
-2. Upload the entire directory and all its contents to your modules directory.
-
-Configuration
--------------
-To enable and configure this module do the following:
-
-1. Go to Admin -> Modules, and enable Module Filter.
-
-2. Go to Admin -> Configuration -> User interface -> Module filter, and make
-   any necessary configuration changes. 
+- Visit the configuration page under Administration > Configuration > User
+  Interface > Module Filter (admin/config/user-interface/modulefilter) to
+  configure to taste.
 
 Tabs
 ----
+
 By default Module Filter alters the modules page into tabs (Can be disabled on
 configuration page). In the tabs view, each package is converted to a vertical
 tab rather than a fieldset which greatly increases the ability to browse them.
@@ -85,6 +86,7 @@ information that pertains to each.
 
 Filter operators
 ----------------
+
 The modules page's filter has three filter operators available. Filter
 operators allow alternative filtering techniques. A filter operator is applied
 by typing within the filter textfield 'operator:' (where operator is the
@@ -105,3 +107,34 @@ the filter string 'description:ctools views' would filter down to modules with
 "ctools" in the description and "views" within the module's name. To pass a
 space within a single query wrap it within double quotes (e.g. 'requires:"chaos
 tools"' or '"bulk export"').
+
+Documentation
+-------------
+
+Additional documentation is located in the Wiki:
+https://github.com/backdrop-contrib/module_filter/wiki/Documentation.
+
+Issues
+------
+
+Bugs and Feature requests should be reported in the Issue Queue:
+https://github.com/backdrop-contrib/module_filter/issues.
+
+Current Maintainers
+-------------------
+
+- [John Franklin](https://github.com/jlfranklin).
+- Seeking additional maintainers.
+
+Credits
+-------
+
+- Ported to Backdrop CMS by [John Franklin](https://github.com/jlfranklin).
+- Originally written for Drupal by [greenSkin](https://www.drupal.org/u/greenskin).
+
+License
+-------
+
+This project is GPL v2 software.
+See the LICENSE.txt file in this directory for complete text.
+
