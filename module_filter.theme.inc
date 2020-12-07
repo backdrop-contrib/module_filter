@@ -19,7 +19,7 @@ function theme_module_filter($variables) {
  * Theme callback for the modules tabbed form.
  */
 function theme_module_filter_system_modules_tabs($variables) {
-  $config = config('module_filter');
+  $config = config('module_filter.settings');
   if (module_exists('views_ui')) {
     // Hack to get consistent style with views ctools dropbutton.
     if (module_load_include('inc', 'views_ui', 'includes/admin')) {

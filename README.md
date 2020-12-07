@@ -130,7 +130,7 @@ Credits
 -------
 
 - Ported to Backdrop CMS by [John Franklin](https://github.com/jlfranklin).
-- Originally written for Drupal by [greenSkin](https://www.drupal.org/u/greenskin).
+- Originally written for Drupal by [James Jeffery](https://github.com/greenskin).
 
 License
 -------

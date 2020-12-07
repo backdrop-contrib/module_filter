@@ -63,7 +63,7 @@ function module_filter_menu() {
  * Implements hook_menu_alter().
  */
 function module_filter_menu_alter(&$items) {
-  if (variable_get('module_filter_update_status_alter', 1) && isset($items['admin/reports/updates'])) {
+  if (config_get('module_filter.settings', 'update_status_alter') && isset($items['admin/reports/updates'])) {
     // We route the updates report page through us.
     $items['admin/reports/updates']['page callback'] = 'module_filter_update_status';
     $items['admin/reports/updates']['file'] = 'module_filter.pages.inc';
@@ -79,7 +79,7 @@ function module_filter_form_system_modules_alter(&$form, &$form_state, $form_id)
   if (isset($form['confirm'])) {
     return;
   }
-
+  $config = config('module_filter.settings');
   $form['module_filter'] = array(
     '#type' => 'module_filter',
     '#attached' => array(
@@ -102,12 +102,12 @@ function module_filter_form_system_modules_alter(&$form, &$form_state, $form_id)
     '#suffix' => '</div>',
   );
 
-  if (variable_get('module_filter_tabs', 1)) {
+  if ($config->get('use_tabs')) {
     $form['module_filter']['#attached']['css'][] = backdrop_get_path('module', 'module_filter') . '/css/module_filter_tab.css';
     $form['module_filter']['#attached']['js'][backdrop_get_path('module', 'module_filter') . '/js/jquery.ba-bbq.js'] = array('weight' => 1);
     $form['module_filter']['#attached']['js'][backdrop_get_path('module', 'module_filter') . '/js/module_filter_tab.js'] = array('weight' => 2);
 
-    if (!module_exists('page_actions') && variable_get('module_filter_dynamic_save_position', 1)) {
+    if (!module_exists('page_actions') && $config->get('dynamic_save_position')) {
       $form['module_filter']['#attached']['css'][] = backdrop_get_path('module', 'module_filter') . '/css/dynamic_position.css';
       $form['module_filter']['#attached']['js'][backdrop_get_path('module', 'module_filter') . '/js/dynamic_position.js'] = array('weight' => 3);
     }
@@ -121,7 +121,7 @@ function module_filter_form_system_modules_alter(&$form, &$form_state, $form_id)
 
   $form['#submit'][] = 'module_filter_system_modules_submit_redirect';
 
-  if (variable_get('module_filter_track_recent_modules', 1)) {
+  if ($config->get('track_recent_modules')) {
     $form['#submit'][] = 'module_filter_system_modules_submit_recent';
   }
 }
@@ -189,6 +189,7 @@ function module_filter_theme() {
  *   The processed element.
  */
 function form_process_module_filter($element, &$form_state) {
+  $config = config('module_filter.settings');
   $element['name'] = array(
     '#type' => 'textfield',
     '#title' => (isset($element['#title'])) ? $element['#title'] : t('Filter list'),
@@ -206,18 +207,18 @@ function form_process_module_filter($element, &$form_state) {
         array(
           'data' => array(
             'moduleFilter' => array(
-              'setFocus' => variable_get('module_filter_set_focus', 1),
-              'tabs' => variable_get('module_filter_tabs', 1),
-              'countEnabled' => variable_get('module_filter_count_enabled', 1),
-              'visualAid' => variable_get('module_filter_visual_aid', 1),
-              'hideEmptyTabs' => variable_get('module_filter_hide_empty_tabs', 0),
-              'dynamicPosition' => (!module_exists('page_actions')) ? variable_get('module_filter_dynamic_save_position', 1) : FALSE,
-              'useURLFragment' => variable_get('module_filter_use_url_fragment', 1),
-              'useSwitch' => variable_get('module_filter_use_switch', 1),
-              'trackRecent' => variable_get('module_filter_track_recent_modules', 1),
-              'rememberActiveTab' => variable_get('module_filter_remember_active_tab', 1),
-              'rememberUpdateState' => variable_get('module_filter_remember_update_state', 0),
-              'expandedDescription' => variable_get('module_filter_expanded_description', 0),
+              'setFocus' => $config->get('set_focus'),
+              'tabs' => $config->get('use_tabs'),
+              'countEnabled' => $config->get('count_enabled'),
+              'visualAid' => $config->get('visual_aid'),
+              'hideEmptyTabs' => $config->get('hide_empty_tabs'),
+              'dynamicPosition' => (!module_exists('page_actions')) ? $config->get('dynamic_save_position') : FALSE,
+              'useURLFragment' => $config->get('use_url_fragment'),
+              'useSwitch' => $config->get('use_switch'),
+              'trackRecent' => $config->get('track_recent_modules'),
+              'rememberActiveTab' => $config->get('remember_active_tab'),
+              'rememberUpdateState' => $config->get('remember_update_state'),
+              'expandedDescription' => $config->get('expanded_description'),
             ),
           ),
           'type' => 'setting',
@@ -254,7 +255,7 @@ function module_filter_system_modules_submit_redirect($form, &$form_state) {
  * Form submission handler to track recently enabled/disabled modules
  */
 function module_filter_system_modules_submit_recent($form, &$form_state) {
-  $recent_modules = variable_get('module_filter_recent_modules', array());
+  $recent_modules = config_get('module_filter.settings', 'recent_modules');
 
   foreach ($form_state['values']['modules'] as $package => $modules) {
     foreach ($modules as $key => $module) {
