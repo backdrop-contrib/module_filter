@@ -2,5 +2,6 @@ name = Module filter
 description = "Filter the modules list."
 backdrop = 1.x
 package = Administration
+type = module
 
 configure = admin/config/user-interface/modulefilter
