@@ -1,6 +1,6 @@
 (function($) {
 
-Drupal.behaviors.moduleFilter = {
+Backdrop.behaviors.moduleFilter = {
   attach: function(context) {
     $('#system-modules td.description').once('description', function() {
       $(this).click(function() {
@@ -16,7 +16,7 @@ Drupal.behaviors.moduleFilter = {
     $('.module-filter-inputs-wrapper', context).once('module-filter', function() {
       var filterInput = $('input[name="module_filter[name]"]', context);
       var selector = '#system-modules table tbody tr';
-      if (Drupal.settings.moduleFilter.tabs) {
+      if (Backdrop.settings.moduleFilter.tabs) {
         selector += '.module';
       }
 
@@ -90,7 +90,7 @@ Drupal.behaviors.moduleFilter = {
         },
         requiredBy: function(string, moduleFilter, item) {
           if (item.requiredBy == undefined) {
-            var requirements = Drupal.ModuleFilter.getRequirements(item.element);
+            var requirements = Backdrop.ModuleFilter.getRequirements(item.element);
             item.requires = requirements.requires;
             item.requiredBy = requirements.requiredBy;
           }
@@ -103,7 +103,7 @@ Drupal.behaviors.moduleFilter = {
         },
         requires: function(string, moduleFilter, item) {
           if (item.requires == undefined) {
-            var requirements = Drupal.ModuleFilter.getRequirements(item.element);
+            var requirements = Backdrop.ModuleFilter.getRequirements(item.element);
             item.requires = requirements.requires;
             item.requiredBy = requirements.requiredBy;
           }
@@ -133,7 +133,7 @@ Drupal.behaviors.moduleFilter = {
         moduleFilter.applyFilter();
       });
 
-      if (!Drupal.settings.moduleFilter.tabs) {
+      if (!Backdrop.settings.moduleFilter.tabs) {
         moduleFilter.element.bind('moduleFilter:start', function() {
           $('#system-modules fieldset').show();
         });
@@ -153,7 +153,7 @@ Drupal.behaviors.moduleFilter = {
   }
 };
 
-Drupal.ModuleFilter.getRequirements = function(element) {
+Backdrop.ModuleFilter.getRequirements = function(element) {
   var requires = new Array();
   var requiredBy = new Array();
   $('.admin-requirements', element).each(function() {

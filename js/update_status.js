@@ -1,6 +1,6 @@
 (function($) {
 
-Drupal.behaviors.moduleFilterUpdateStatus = {
+Backdrop.behaviors.moduleFilterUpdateStatus = {
   attach: function(context) {
     $('#module-filter-update-status-form').once('update-status', function() {
       var filterInput = $('input[name="module_filter[name]"]', context);
@@ -39,7 +39,7 @@ Drupal.behaviors.moduleFilterUpdateStatus = {
         ],
         buildIndex: [
           function(moduleFilter, item) {
-            if ($('.version-status', item.element).text() == Drupal.t('Ignored from settings')) {
+            if ($('.version-status', item.element).text() == Backdrop.t('Ignored from settings')) {
               item.state = 'ignored';
               return item;
             }
@@ -63,8 +63,8 @@ Drupal.behaviors.moduleFilterUpdateStatus = {
 
       var moduleFilter = filterInput.data('moduleFilter');
 
-      if (Drupal.settings.moduleFilter.rememberUpdateState) {
-        var updateShow = Drupal.ModuleFilter.getState('updateShow');
+      if (Backdrop.settings.moduleFilter.rememberUpdateState) {
+        var updateShow = Backdrop.ModuleFilter.getState('updateShow');
         if (updateShow) {
           moduleFilter.options.show = updateShow;
           $('#edit-module-filter-show input[name="module_filter[show]"][value="' + updateShow + '"]', context).click();
@@ -73,7 +73,7 @@ Drupal.behaviors.moduleFilterUpdateStatus = {
 
       $('#edit-module-filter-show input[name="module_filter[show]"]', context).change(function() {
         moduleFilter.options.show = $(this).val();
-        Drupal.ModuleFilter.setState('updateShow', moduleFilter.options.show);
+        Backdrop.ModuleFilter.setState('updateShow', moduleFilter.options.show);
         moduleFilter.applyFilter();
       });
 

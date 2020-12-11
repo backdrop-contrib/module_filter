@@ -14,7 +14,7 @@ function module_filter_update_status() {
   $update_report = update_status();
 
   return array(
-    'module_filter' => drupal_get_form('module_filter_update_status_form'),
+    'module_filter' => backdrop_get_form('module_filter_update_status_form'),
     'update_report' => array(
       '#markup' => $update_report,
     ),
@@ -29,10 +29,10 @@ function module_filter_update_status_form($form, &$form_state) {
     '#type' => 'module_filter',
     '#attached' => array(
       'css' => array(
-        drupal_get_path('module', 'module_filter') . '/css/update_status.css',
+        backdrop_get_path('module', 'module_filter') . '/css/update_status.css',
       ),
       'js' => array(
-        drupal_get_path('module', 'module_filter') . '/js/update_status.js',
+        backdrop_get_path('module', 'module_filter') . '/js/update_status.js',
       ),
     ),
   );

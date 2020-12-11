@@ -24,7 +24,7 @@ function theme_module_filter_system_modules_tabs($variables) {
     // Hack to get consistent style with views ctools dropbutton.
     if (module_load_include('inc', 'views_ui', 'includes/admin')) {
       foreach (views_ui_get_admin_css() as $file => $options) {
-        drupal_add_css($file, $options);
+        backdrop_add_css($file, $options);
       }
     }
   }
@@ -138,7 +138,7 @@ function theme_module_filter_system_modules_tabs($variables) {
           $description .= '<div class="admin-requirements">' . t('Version: !module-version', array('!module-version' => backdrop_render($module['version']))) . '</div>';
         }
         if ($show_path) {
-          $module_path = drupal_get_path('module', $key);
+          $module_path = backdrop_get_path('module', $key);
           $description .= '<div class="admin-requirements path" title="' . $module_path . '">' . t('Path: !module-path', array('!module-path' => $module_path)) . '</div>';
         }
 
@@ -180,7 +180,7 @@ function theme_module_filter_system_modules_tabs($variables) {
       'total' => count($value),
     );
   }
-  drupal_add_js(array(
+  backdrop_add_js(array(
     'moduleFilter' => array(
       'packageIDs' => $package_ids,
       'enabledCounts' => $enabled_counts,

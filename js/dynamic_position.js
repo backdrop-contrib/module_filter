@@ -1,6 +1,6 @@
 (function($) {
 
-Drupal.behaviors.moduleFilterDynamicPosition = {
+Backdrop.behaviors.moduleFilterDynamicPosition = {
   attach: function(context) {
     var $window = $(window);
 

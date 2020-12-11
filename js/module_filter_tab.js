@@ -1,47 +1,47 @@
 
 (function ($) {
 
-Drupal.ModuleFilter.tabs = {};
-Drupal.ModuleFilter.enabling = {};
-Drupal.ModuleFilter.disabling = {};
+Backdrop.ModuleFilter.tabs = {};
+Backdrop.ModuleFilter.enabling = {};
+Backdrop.ModuleFilter.disabling = {};
 
-Drupal.ModuleFilter.jQueryIsNewer = function() {
-  if (Drupal.ModuleFilter.jQueryNewer == undefined) {
+Backdrop.ModuleFilter.jQueryIsNewer = function() {
+  if (Backdrop.ModuleFilter.jQueryNewer == undefined) {
     var v1parts = $.fn.jquery.split('.');
     var v2parts = new Array('1', '4', '4');
 
     for (var i = 0; i < v1parts.length; ++i) {
       if (v2parts.length == i) {
-        Drupal.ModuleFilter.jQueryNewer = true;
-        return Drupal.ModuleFilter.jQueryNewer;
+        Backdrop.ModuleFilter.jQueryNewer = true;
+        return Backdrop.ModuleFilter.jQueryNewer;
       }
 
       if (v1parts[i] == v2parts[i]) {
         continue;
       }
       else if (v1parts[i] > v2parts[i]) {
-        Drupal.ModuleFilter.jQueryNewer = true;
-        return Drupal.ModuleFilter.jQueryNewer;
+        Backdrop.ModuleFilter.jQueryNewer = true;
+        return Backdrop.ModuleFilter.jQueryNewer;
       }
       else {
-        Drupal.ModuleFilter.jQueryNewer = false;
-        return Drupal.ModuleFilter.jQueryNewer;
+        Backdrop.ModuleFilter.jQueryNewer = false;
+        return Backdrop.ModuleFilter.jQueryNewer;
       }
     }
 
     if (v1parts.length != v2parts.length) {
-      Drupal.ModuleFilter.jQueryNewer = false;
-      return Drupal.ModuleFilter.jQueryNewer;
+      Backdrop.ModuleFilter.jQueryNewer = false;
+      return Backdrop.ModuleFilter.jQueryNewer;
     }
 
-    Drupal.ModuleFilter.jQueryNewer = false;
+    Backdrop.ModuleFilter.jQueryNewer = false;
   }
-  return Drupal.ModuleFilter.jQueryNewer;
+  return Backdrop.ModuleFilter.jQueryNewer;
 };
 
-Drupal.behaviors.moduleFilterTabs = {
+Backdrop.behaviors.moduleFilterTabs = {
   attach: function(context) {
-    if (Drupal.settings.moduleFilter.tabs) {
+    if (Backdrop.settings.moduleFilter.tabs) {
       $('#module-filter-wrapper table:not(.sticky-header)', context).once('module-filter-tabs', function() {
         var $modules = $('#module-filter-modules');
         var moduleFilter = $('input[name="module_filter[name]"]').data('moduleFilter');
@@ -56,37 +56,37 @@ Drupal.behaviors.moduleFilterTabs = {
 
         // Build tabs from package title rows.
         var tabs = '<ul>';
-        for (var i in Drupal.settings.moduleFilter.packageIDs) {
-          var id = Drupal.checkPlain(Drupal.settings.moduleFilter.packageIDs[i]);
+        for (var i in Backdrop.settings.moduleFilter.packageIDs) {
+          var id = Backdrop.checkPlain(Backdrop.settings.moduleFilter.packageIDs[i]);
 
           var name = id;
           var tabClass = 'project-tab';
           var title = null;
-          var summary = (Drupal.settings.moduleFilter.countEnabled) ? '<span class="count">' + Drupal.ModuleFilter.countSummary(id) + '</span>' : '';
+          var summary = (Backdrop.settings.moduleFilter.countEnabled) ? '<span class="count">' + Backdrop.ModuleFilter.countSummary(id) + '</span>' : '';
 
           switch (id) {
             case 'all':
-              name = Drupal.t('All');
+              name = Backdrop.t('All');
               break;
             case 'new':
-              name = Drupal.t('New');
-              title = Drupal.t('Modules installed within the last week.');
-              if (Drupal.settings.moduleFilter.enabledCounts['new'].total == 0) {
+              name = Backdrop.t('New');
+              title = Backdrop.t('Modules installed within the last week.');
+              if (Backdrop.settings.moduleFilter.enabledCounts['new'].total == 0) {
                 tabClass += ' disabled';
-                summary += '<span>' + Drupal.t('No modules added within the last week.') + '</span>';
+                summary += '<span>' + Backdrop.t('No modules added within the last week.') + '</span>';
               }
               break;
             case 'recent':
-              name = Drupal.t('Recent');
-              title = Drupal.t('Modules enabled/disabled within the last week.');
-              if (Drupal.settings.moduleFilter.enabledCounts['recent'].total == 0) {
+              name = Backdrop.t('Recent');
+              title = Backdrop.t('Modules enabled/disabled within the last week.');
+              if (Backdrop.settings.moduleFilter.enabledCounts['recent'].total == 0) {
                 tabClass += ' disabled';
-                summary += '<span>' + Drupal.t('No modules were enabled or disabled within the last week.') + '</span>';
+                summary += '<span>' + Backdrop.t('No modules were enabled or disabled within the last week.') + '</span>';
               }
               break;
             default:
               var $row = $('#' + id + '-package', this);
-              name = Drupal.checkPlain($.trim($row.text()));
+              name = Backdrop.checkPlain($.trim($row.text()));
               $row.remove();
               break;
           }
@@ -101,7 +101,7 @@ Drupal.behaviors.moduleFilterTabs = {
         $('#module-filter-tabs li').each(function() {
           var $tab = $(this);
           var id = $tab.attr('id');
-          Drupal.ModuleFilter.tabs[id] = new Drupal.ModuleFilter.Tab($tab, id);
+          Backdrop.ModuleFilter.tabs[id] = new Backdrop.ModuleFilter.Tab($tab, id);
         });
 
         $('tbody td.checkbox input', $modules).change(function() {
@@ -110,9 +110,9 @@ Drupal.behaviors.moduleFilterTabs = {
 
           moduleFilter.index[key].status = $checkbox.is(':checked');
 
-          if (Drupal.settings.moduleFilter.visualAid) {
+          if (Backdrop.settings.moduleFilter.visualAid) {
             var type = ($checkbox.is(':checked')) ? 'enable' : 'disable';
-            Drupal.ModuleFilter.updateVisualAid(type, $checkbox.parents('tr'));
+            Backdrop.ModuleFilter.updateVisualAid(type, $checkbox.parents('tr'));
           }
         });
 
@@ -141,9 +141,9 @@ Drupal.behaviors.moduleFilterTabs = {
           };
 
           // Empty result info from tabs.
-          for (var i in Drupal.ModuleFilter.tabs) {
-            if (Drupal.ModuleFilter.tabs[i].resultInfo != undefined) {
-              Drupal.ModuleFilter.tabs[i].resultInfo.empty();
+          for (var i in Backdrop.ModuleFilter.tabs) {
+            if (Backdrop.ModuleFilter.tabs[i].resultInfo != undefined) {
+              Backdrop.ModuleFilter.tabs[i].resultInfo.empty();
             }
           }
         });
@@ -151,7 +151,7 @@ Drupal.behaviors.moduleFilterTabs = {
         moduleFilter.element.bind('moduleFilter:finish', function(e, data) {
           $.each(moduleFilter.index, function(key, item) {
             if (!item.element.hasClass('js-hide')) {
-              var id = Drupal.ModuleFilter.getTabID(item.element);
+              var id = Backdrop.ModuleFilter.getTabID(item.element);
 
               if (moduleFilter.tabResults[id] == undefined) {
                 moduleFilter.tabResults[id] = { items: {}, count: 0 };
@@ -174,8 +174,8 @@ Drupal.behaviors.moduleFilterTabs = {
                 moduleFilter.tabResults[id].count++;
               }
 
-              if (Drupal.ModuleFilter.activeTab != undefined && Drupal.ModuleFilter.activeTab.id != 'all-tab') {
-                if ((Drupal.ModuleFilter.activeTab.id == 'recent-tab' && !item.element.hasClass('recent-module')) || (Drupal.ModuleFilter.activeTab.id == 'new-tab' && !item.element.hasClass('new-module')) || (Drupal.ModuleFilter.activeTab.id != 'recent-tab' && Drupal.ModuleFilter.activeTab.id != 'new-tab' && id != Drupal.ModuleFilter.activeTab.id)) {
+              if (Backdrop.ModuleFilter.activeTab != undefined && Backdrop.ModuleFilter.activeTab.id != 'all-tab') {
+                if ((Backdrop.ModuleFilter.activeTab.id == 'recent-tab' && !item.element.hasClass('recent-module')) || (Backdrop.ModuleFilter.activeTab.id == 'new-tab' && !item.element.hasClass('new-module')) || (Backdrop.ModuleFilter.activeTab.id != 'recent-tab' && Backdrop.ModuleFilter.activeTab.id != 'new-tab' && id != Backdrop.ModuleFilter.activeTab.id)) {
                   // The item is not in the active tab, so hide it.
                   item.element.addClass('js-hide');
                 }
@@ -183,11 +183,11 @@ Drupal.behaviors.moduleFilterTabs = {
             }
           });
 
-          if (Drupal.settings.moduleFilter.visualAid) {
+          if (Backdrop.settings.moduleFilter.visualAid) {
             if (moduleFilter.text) {
               // Add result info to tabs.
               for (var id in moduleFilter.tabResults) {
-                var tab = Drupal.ModuleFilter.tabs[id];
+                var tab = Backdrop.ModuleFilter.tabs[id];
 
                 if (tab.resultInfo == undefined) {
                   var resultInfo = '<span class="result-info"></span>'
@@ -198,26 +198,26 @@ Drupal.behaviors.moduleFilterTabs = {
                 tab.resultInfo.append(moduleFilter.tabResults[id].count);
               }
 
-              if (Drupal.settings.moduleFilter.hideEmptyTabs) {
-                for (var id in Drupal.ModuleFilter.tabs) {
+              if (Backdrop.settings.moduleFilter.hideEmptyTabs) {
+                for (var id in Backdrop.ModuleFilter.tabs) {
                   if (moduleFilter.tabResults[id] != undefined) {
-                    Drupal.ModuleFilter.tabs[id].element.show();
+                    Backdrop.ModuleFilter.tabs[id].element.show();
                   }
-                  else if (Drupal.ModuleFilter.activeTab == undefined || Drupal.ModuleFilter.activeTab.id != id) {
-                    Drupal.ModuleFilter.tabs[id].element.hide();
+                  else if (Backdrop.ModuleFilter.activeTab == undefined || Backdrop.ModuleFilter.activeTab.id != id) {
+                    Backdrop.ModuleFilter.tabs[id].element.hide();
                   }
                 }
               }
             }
             else {
               // Make sure all tabs are visible.
-              if (Drupal.settings.moduleFilter.hideEmptyTabs) {
+              if (Backdrop.settings.moduleFilter.hideEmptyTabs) {
                 $('#module-filter-tabs li').show();
               }
             }
           }
 
-          if ((Drupal.ModuleFilter.activeTab != undefined && (moduleFilter.tabResults[Drupal.ModuleFilter.activeTab.id] == undefined || moduleFilter.tabResults[Drupal.ModuleFilter.activeTab.id].count <= 0))) {
+          if ((Backdrop.ModuleFilter.activeTab != undefined && (moduleFilter.tabResults[Backdrop.ModuleFilter.activeTab.id] == undefined || moduleFilter.tabResults[Backdrop.ModuleFilter.activeTab.id].count <= 0))) {
             // The current tab contains no results.
             moduleFilter.results = 0;
           }
@@ -225,14 +225,14 @@ Drupal.behaviors.moduleFilterTabs = {
           moduleFilter.adjustHeight();
         });
 
-        if (Drupal.settings.moduleFilter.useURLFragment) {
-          $(window).bind('hashchange.module-filter', $.proxy(Drupal.ModuleFilter, 'eventHandlerOperateByURLFragment')).triggerHandler('hashchange.module-filter');
+        if (Backdrop.settings.moduleFilter.useURLFragment) {
+          $(window).bind('hashchange.module-filter', $.proxy(Backdrop.ModuleFilter, 'eventHandlerOperateByURLFragment')).triggerHandler('hashchange.module-filter');
         }
         else {
-          Drupal.ModuleFilter.selectTab();
+          Backdrop.ModuleFilter.selectTab();
         }
 
-        if (Drupal.settings.moduleFilter.useSwitch) {
+        if (Backdrop.settings.moduleFilter.useSwitch) {
           $('td.checkbox div.form-item', table).hide();
           $('td.checkbox', table).each(function(i) {
             var $cell = $(this);
@@ -240,7 +240,7 @@ Drupal.behaviors.moduleFilterTabs = {
             var $switch = $('.toggle-enable', $cell);
             $switch.removeClass('js-hide').click(function() {
               if (!$(this).hasClass('disabled')) {
-                if (Drupal.ModuleFilter.jQueryIsNewer()) {
+                if (Backdrop.ModuleFilter.jQueryIsNewer()) {
                   $checkbox.click();
                   $switch.toggleClass('off');
                 }
@@ -319,7 +319,7 @@ Drupal.behaviors.moduleFilterTabs = {
             if (pageActionsHeight > 0) {
               style = 'bottom: ' + pageActionsHeight + 'px';
             }
-            else if (Drupal.settings.moduleFilter.dynamicPosition) {
+            else if (Backdrop.settings.moduleFilter.dynamicPosition) {
               // style = 'bottom: ' + $('#module-filter-submit', $tabs).height() + 'px';
             }
             $tabs.attr('style', style);
@@ -356,7 +356,7 @@ Drupal.behaviors.moduleFilterTabs = {
   }
 };
 
-Drupal.ModuleFilter.Tab = function(element, id) {
+Backdrop.ModuleFilter.Tab = function(element, id) {
   var self = this;
 
   this.id = id;
@@ -364,9 +364,9 @@ Drupal.ModuleFilter.Tab = function(element, id) {
   this.element = element;
 
   $('a', this.element).click(function() {
-    if (!Drupal.settings.moduleFilter.useURLFragment) {
+    if (!Backdrop.settings.moduleFilter.useURLFragment) {
       var hash = (!self.element.hasClass('selected')) ? self.hash : 'all';
-      Drupal.ModuleFilter.selectTab(hash);
+      Backdrop.ModuleFilter.selectTab(hash);
       return false;
     }
 
@@ -387,11 +387,11 @@ Drupal.ModuleFilter.Tab = function(element, id) {
   );
 };
 
-Drupal.ModuleFilter.selectTab = function(hash) {
-  if (!hash || Drupal.ModuleFilter.tabs[hash + '-tab'] == undefined || Drupal.settings.moduleFilter.enabledCounts[hash].total == 0) {
-    if (Drupal.settings.moduleFilter.rememberActiveTab) {
-      var activeTab = Drupal.ModuleFilter.getState('activeTab');
-      if (activeTab && Drupal.ModuleFilter.tabs[activeTab + '-tab'] != undefined) {
+Backdrop.ModuleFilter.selectTab = function(hash) {
+  if (!hash || Backdrop.ModuleFilter.tabs[hash + '-tab'] == undefined || Backdrop.settings.moduleFilter.enabledCounts[hash].total == 0) {
+    if (Backdrop.settings.moduleFilter.rememberActiveTab) {
+      var activeTab = Backdrop.ModuleFilter.getState('activeTab');
+      if (activeTab && Backdrop.ModuleFilter.tabs[activeTab + '-tab'] != undefined) {
         hash = activeTab;
       }
     }
@@ -401,44 +401,44 @@ Drupal.ModuleFilter.selectTab = function(hash) {
     }
   }
 
-  if (Drupal.ModuleFilter.activeTab != undefined) {
-    Drupal.ModuleFilter.activeTab.element.removeClass('selected');
+  if (Backdrop.ModuleFilter.activeTab != undefined) {
+    Backdrop.ModuleFilter.activeTab.element.removeClass('selected');
   }
 
-  Drupal.ModuleFilter.activeTab = Drupal.ModuleFilter.tabs[hash + '-tab'];
-  Drupal.ModuleFilter.activeTab.element.addClass('selected');
+  Backdrop.ModuleFilter.activeTab = Backdrop.ModuleFilter.tabs[hash + '-tab'];
+  Backdrop.ModuleFilter.activeTab.element.addClass('selected');
 
   var moduleFilter = $('input[name="module_filter[name]"]').data('moduleFilter');
   var filter = moduleFilter.applyFilter();
 
-  if (!Drupal.ModuleFilter.modulesTop) {
-    Drupal.ModuleFilter.modulesTop = $('#module-filter-modules').offset().top;
+  if (!Backdrop.ModuleFilter.modulesTop) {
+    Backdrop.ModuleFilter.modulesTop = $('#module-filter-modules').offset().top;
   }
   else {
     // Calculate header offset; this is important in case the site is using
     // admin_menu module which has fixed positioning and is on top of everything
     // else.
-    var headerOffset = Drupal.settings.tableHeaderOffset ? eval(Drupal.settings.tableHeaderOffset + '()') : 0;
+    var headerOffset = Backdrop.settings.tableHeaderOffset ? eval(Backdrop.settings.tableHeaderOffset + '()') : 0;
     // Scroll back to top of #module-filter-modules.
     $('html, body').animate({
-      scrollTop: Drupal.ModuleFilter.modulesTop - headerOffset
+      scrollTop: Backdrop.ModuleFilter.modulesTop - headerOffset
     }, 500);
-    // $('html, body').scrollTop(Drupal.ModuleFilter.modulesTop);
+    // $('html, body').scrollTop(Backdrop.ModuleFilter.modulesTop);
   }
 
-  Drupal.ModuleFilter.setState('activeTab', hash);
+  Backdrop.ModuleFilter.setState('activeTab', hash);
 };
 
-Drupal.ModuleFilter.eventHandlerOperateByURLFragment = function(event) {
+Backdrop.ModuleFilter.eventHandlerOperateByURLFragment = function(event) {
   var hash = $.param.fragment();
-  Drupal.ModuleFilter.selectTab(hash);
+  Backdrop.ModuleFilter.selectTab(hash);
 };
 
-Drupal.ModuleFilter.countSummary = function(id) {
-  return Drupal.t('@enabled of @total', { '@enabled': Drupal.settings.moduleFilter.enabledCounts[id].enabled, '@total': Drupal.settings.moduleFilter.enabledCounts[id].total });
+Backdrop.ModuleFilter.countSummary = function(id) {
+  return Backdrop.t('@enabled of @total', { '@enabled': Backdrop.settings.moduleFilter.enabledCounts[id].enabled, '@total': Backdrop.settings.moduleFilter.enabledCounts[id].total });
 };
 
-Drupal.ModuleFilter.Tab.prototype.updateEnabling = function(name, remove) {
+Backdrop.ModuleFilter.Tab.prototype.updateEnabling = function(name, remove) {
   this.enabling = this.enabling || {};
   if (!remove) {
     this.enabling[name] = name;
@@ -448,7 +448,7 @@ Drupal.ModuleFilter.Tab.prototype.updateEnabling = function(name, remove) {
   }
 };
 
-Drupal.ModuleFilter.Tab.prototype.updateDisabling = function(name, remove) {
+Backdrop.ModuleFilter.Tab.prototype.updateDisabling = function(name, remove) {
   this.disabling = this.disabling || {};
   if (!remove) {
     this.disabling[name] = name;
@@ -458,7 +458,7 @@ Drupal.ModuleFilter.Tab.prototype.updateDisabling = function(name, remove) {
   }
 };
 
-Drupal.ModuleFilter.Tab.prototype.updateVisualAid = function() {
+Backdrop.ModuleFilter.Tab.prototype.updateVisualAid = function() {
   var visualAid = '';
   var enabling = new Array();
   var disabling = new Array();
@@ -493,13 +493,13 @@ Drupal.ModuleFilter.Tab.prototype.updateVisualAid = function() {
   this.visualAid.empty().append(visualAid);
 };
 
-Drupal.ModuleFilter.getTabID = function($row) {
+Backdrop.ModuleFilter.getTabID = function($row) {
   var id = $row.data('moduleFilterTabID');
   if (!id) {
     // Find the tab ID.
     var classes = $row.attr('class').split(' ');
     for (var i in classes) {
-      if (Drupal.ModuleFilter.tabs[classes[i]] != undefined) {
+      if (Backdrop.ModuleFilter.tabs[classes[i]] != undefined) {
         id = classes[i];
         break;
       }
@@ -509,36 +509,36 @@ Drupal.ModuleFilter.getTabID = function($row) {
   return id;
 };
 
-Drupal.ModuleFilter.updateVisualAid = function(type, $row) {
-  var id = Drupal.ModuleFilter.getTabID($row);
+Backdrop.ModuleFilter.updateVisualAid = function(type, $row) {
+  var id = Backdrop.ModuleFilter.getTabID($row);
 
   if (!id) {
     return false;
   }
 
-  var tab = Drupal.ModuleFilter.tabs[id];
-  var name = Drupal.checkPlain($('td:nth(1) strong', $row).text());
+  var tab = Backdrop.ModuleFilter.tabs[id];
+  var name = Backdrop.checkPlain($('td:nth(1) strong', $row).text());
   switch (type) {
     case 'enable':
-      if (Drupal.ModuleFilter.disabling[id + name] != undefined) {
-        delete Drupal.ModuleFilter.disabling[id + name];
+      if (Backdrop.ModuleFilter.disabling[id + name] != undefined) {
+        delete Backdrop.ModuleFilter.disabling[id + name];
         tab.updateDisabling(name, true);
         $row.removeClass('disabling');
       }
       else {
-        Drupal.ModuleFilter.enabling[id + name] = name;
+        Backdrop.ModuleFilter.enabling[id + name] = name;
         tab.updateEnabling(name);
         $row.addClass('enabling');
       }
       break;
     case 'disable':
-      if (Drupal.ModuleFilter.enabling[id + name] != undefined) {
-        delete Drupal.ModuleFilter.enabling[id + name];
+      if (Backdrop.ModuleFilter.enabling[id + name] != undefined) {
+        delete Backdrop.ModuleFilter.enabling[id + name];
         tab.updateEnabling(name, true);
         $row.removeClass('enabling');
       }
       else {
-        Drupal.ModuleFilter.disabling[id + name] = name;
+        Backdrop.ModuleFilter.disabling[id + name] = name;
         tab.updateDisabling(name);
         $row.addClass('disabling');
       }
@@ -548,7 +548,7 @@ Drupal.ModuleFilter.updateVisualAid = function(type, $row) {
   tab.updateVisualAid();
 };
 
-Drupal.ModuleFilter.Filter.prototype.adjustHeight = function() {
+Backdrop.ModuleFilter.Filter.prototype.adjustHeight = function() {
   // Hack for adjusting the height of the modules section.
   var minHeight = $('#module-filter-tabs ul').height() + 10;
   minHeight += $('#module-filter-tabs #module-filter-submit').height();

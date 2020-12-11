@@ -2,7 +2,7 @@
 
 var lastModuleItem;
 
-Drupal.behaviors.moduleFilterPermissions = {
+Backdrop.behaviors.moduleFilterPermissions = {
   attach: function(context) {
     $('.module-filter-inputs-wrapper', context).once('module-filter', function() {
       var filterInput = $('input[name="module_filter[name]"]', context);

@@ -1,8 +1,8 @@
 (function ($) {
 
-Drupal.ModuleFilter = {};
+Backdrop.ModuleFilter = {};
 
-Drupal.ModuleFilter.explode = function(string) {
+Backdrop.ModuleFilter.explode = function(string) {
   var queryArray = string.match(/([a-zA-Z]+\:(\w+|"[^"]+")*)|\w+|"[^"]+"/g);
   if (!queryArray) {
     queryArray = new Array();
@@ -14,10 +14,10 @@ Drupal.ModuleFilter.explode = function(string) {
   return queryArray;
 };
 
-Drupal.ModuleFilter.getState = function(key) {
-  if (!Drupal.ModuleFilter.state) {
-    Drupal.ModuleFilter.state = {};
-    var cookie = $.cookie('DrupalModuleFilter');
+Backdrop.ModuleFilter.getState = function(key) {
+  if (!Backdrop.ModuleFilter.state) {
+    Backdrop.ModuleFilter.state = {};
+    var cookie = $.cookie('BackdropModuleFilter');
     var query = cookie ? cookie.split('&') : [];
     if (query) {
       for (var i in query) {
@@ -27,34 +27,34 @@ Drupal.ModuleFilter.getState = function(key) {
         if (typeof(query[i]) == 'string' && query[i].indexOf('=') != -1) {
           var values = query[i].split('=');
           if (values.length === 2) {
-            Drupal.ModuleFilter.state[values[0]] = values[1];
+            Backdrop.ModuleFilter.state[values[0]] = values[1];
           }
         }
       }
     }
   }
-  return Drupal.ModuleFilter.state[key] ? Drupal.ModuleFilter.state[key] : false;
+  return Backdrop.ModuleFilter.state[key] ? Backdrop.ModuleFilter.state[key] : false;
 };
 
-Drupal.ModuleFilter.setState = function(key, value) {
-  var existing = Drupal.ModuleFilter.getState(key);
+Backdrop.ModuleFilter.setState = function(key, value) {
+  var existing = Backdrop.ModuleFilter.getState(key);
   if (existing != value) {
-    Drupal.ModuleFilter.state[key] = value;
+    Backdrop.ModuleFilter.state[key] = value;
     var query = [];
-    for (var i in Drupal.ModuleFilter.state) {
-      query.push(i + '=' + Drupal.ModuleFilter.state[i]);
+    for (var i in Backdrop.ModuleFilter.state) {
+      query.push(i + '=' + Backdrop.ModuleFilter.state[i]);
     }
-    $.cookie('DrupalModuleFilter', query.join('&'), { expires: 7, path: '/' });
+    $.cookie('BackdropModuleFilter', query.join('&'), { expires: 7, path: '/' });
   }
 };
 
-Drupal.ModuleFilter.Filter = function(element, selector, options) {
+Backdrop.ModuleFilter.Filter = function(element, selector, options) {
   var self = this;
 
   this.element = element;
   this.text = $(this.element).val();
 
-  this.settings = Drupal.settings.moduleFilter;
+  this.settings = Backdrop.settings.moduleFilter;
 
   this.selector = selector;
 
@@ -62,7 +62,7 @@ Drupal.ModuleFilter.Filter = function(element, selector, options) {
     delay: 500,
     striping: false,
     childSelector: null,
-    empty: Drupal.t('No results'),
+    empty: Backdrop.t('No results'),
     rules: new Array()
   }, options);
   if (this.options.wrapper == undefined) {
@@ -70,7 +70,7 @@ Drupal.ModuleFilter.Filter = function(element, selector, options) {
   }
 
   // Add clear button.
-  this.element.after('<div class="module-filter-clear"><a href="#" class="js-hide">' + Drupal.t('clear') + '</a></div>');
+  this.element.after('<div class="module-filter-clear"><a href="#" class="js-hide">' + Backdrop.t('clear') + '</a></div>');
   if (this.text) {
     $('.module-filter-clear a', this.element.parent()).removeClass('js-hide');
   }
@@ -85,7 +85,7 @@ Drupal.ModuleFilter.Filter = function(element, selector, options) {
   });
 
   this.updateQueries = function() {
-    var queryStrings = Drupal.ModuleFilter.explode(self.text);
+    var queryStrings = Backdrop.ModuleFilter.explode(self.text);
 
     self.queries = new Array();
     for (var i in queryStrings) {
@@ -204,7 +204,7 @@ Drupal.ModuleFilter.Filter = function(element, selector, options) {
   });
 };
 
-Drupal.ModuleFilter.Filter.prototype.buildIndex = function() {
+Backdrop.ModuleFilter.Filter.prototype.buildIndex = function() {
   var self = this;
   var index = new Array();
   $(this.selector).each(function(i) {
@@ -225,7 +225,7 @@ Drupal.ModuleFilter.Filter.prototype.buildIndex = function() {
   this.index = index;
 };
 
-Drupal.ModuleFilter.Filter.prototype.processRules = function(item) {
+Backdrop.ModuleFilter.Filter.prototype.processRules = function(item) {
   var self = this;
   var $item = item.element;
   var rulesResult = true;
@@ -245,7 +245,7 @@ Drupal.ModuleFilter.Filter.prototype.processRules = function(item) {
   return rulesResult;
 };
 
-Drupal.ModuleFilter.Filter.prototype.stripe = function() {
+Backdrop.ModuleFilter.Filter.prototype.stripe = function() {
   var self = this;
   var flip = { even: 'odd', odd: 'even' };
   var stripe = 'odd';
@@ -262,13 +262,13 @@ Drupal.ModuleFilter.Filter.prototype.stripe = function() {
 $.fn.moduleFilter = function(selector, options) {
   var filterInput = this;
   filterInput.parents('.module-filter-inputs-wrapper').show();
-  if (Drupal.settings.moduleFilter.setFocus) {
+  if (Backdrop.settings.moduleFilter.setFocus) {
     filterInput.focus();
   }
-  if (Drupal.settings.moduleFilter.expandedDescription) {
+  if (Backdrop.settings.moduleFilter.expandedDescription) {
     $('#system-modules td.description .inner.expand').addClass('expanded');
   }
-  filterInput.data('moduleFilter', new Drupal.ModuleFilter.Filter(this, selector, options));
+  filterInput.data('moduleFilter', new Backdrop.ModuleFilter.Filter(this, selector, options));
 };
 
 })(jQuery);

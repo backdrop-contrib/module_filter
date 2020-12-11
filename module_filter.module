@@ -27,7 +27,7 @@ function module_filter_help($path, $arg) {
       $output .= '<p>';
       $output .= t('The filter textfield is available on each tab but currently doesn\'t support autocomplete.');
       $output .= '</p>';
-      $output .= '<p>' . t('For more information, please visit the <a href="https://www.drupal.org/project/module_filter">official project page on Drupal.org</a>') . '</p>';
+      $output .= '<p>' . t('For more information, please visit the <a href="https://www.backdropcms.org/project/module_filter">official project page on BackdropCMS.org</a>') . '</p>';
       return $output;
   }
 }
