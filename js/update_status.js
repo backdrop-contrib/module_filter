@@ -43,16 +43,16 @@ Backdrop.behaviors.moduleFilterUpdateStatus = {
               item.state = 'ignored';
               return item;
             }
-            if (item.element.is('.ok')) {
+            if (item.element.is('.report-status')) {
               item.state = 'ok';
             }
-            else if (item.element.is('.warning')) {
+            else if (item.element.is('.report-warning')) {
               item.state = 'warning';
             }
-            else if (item.element.is('.error')) {
+            else if (item.element.is('.report-error')) {
               item.state = 'error';
             }
-            else if (item.element.is('.unknown')) {
+            else if (item.element.is('.report-unknown')) {
               item.state = 'unknown';
             }
             return item;
