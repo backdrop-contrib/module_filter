@@ -1,6 +1,7 @@
 {
     "_config_name": "module_filter.settings",
     "_config_static": true,
+    "recent_modules": [],
     "set_focus": 1,
     "use_tabs": 1,
     "count_enabled": 1,
