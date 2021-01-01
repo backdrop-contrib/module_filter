@@ -60,6 +60,23 @@ function module_filter_menu() {
 }
 
 /**
+ * Implements hook_library_info().
+ */
+function module_filter_library_info() {
+  // jQuery BBQ plugin.
+  $libraries['jquery.bbq'] = array(
+    'title' => 'jQuery BBQ',
+    'website' => 'http://benalman.com/projects/jquery-bbq-plugin/',
+    'version' => '1.2.1',
+    'js' => array(
+      drupal_get_path('module', 'module_filter') . '/js/jquery.ba-bbq.js' => array(),
+    ),
+  );
+
+  return $libraries;
+}
+
+/**
  * Implements hook_menu_alter().
  */
 function module_filter_menu_alter(&$items) {
@@ -104,7 +121,7 @@ function module_filter_form_system_modules_alter(&$form, &$form_state, $form_id)
 
   if ($config->get('use_tabs')) {
     $form['module_filter']['#attached']['css'][] = backdrop_get_path('module', 'module_filter') . '/css/module_filter_tab.css';
-    $form['module_filter']['#attached']['js'][backdrop_get_path('module', 'module_filter') . '/js/jquery.ba-bbq.js'] = array('weight' => 1);
+    $form['module_filter']['#attached']['library'][] = array('module_filter', 'jquery.bbq');
     $form['module_filter']['#attached']['js'][backdrop_get_path('module', 'module_filter') . '/js/module_filter_tab.js'] = array('weight' => 2);
 
     if (!module_exists('page_actions') && $config->get('dynamic_save_position')) {
