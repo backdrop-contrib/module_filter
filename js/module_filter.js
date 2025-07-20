@@ -70,7 +70,7 @@ Backdrop.ModuleFilter.Filter = function(element, selector, options) {
   }
 
   // Add clear button.
-  this.element.after('<div class="module-filter-clear"><a href="#" class="js-hide">' + Backdrop.t('clear') + '</a></div>');
+  this.element.after('<div class="module-filter-clear"><a href="#" class="js-hide btn btn-secondary">' + Backdrop.t('clear') + '</a></div>');
   if (this.text) {
     $('.module-filter-clear a', this.element.parent()).removeClass('js-hide');
   }
