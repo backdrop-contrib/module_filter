@@ -346,7 +346,12 @@ Backdrop.behaviors.moduleFilterTabs = {
               }
             }
             else { // Scrolling up
-              fixToTop(top);
+              if ($tabs.outerHeight() > (bottom - top)) {
+                fixToBottom(bottom);
+              }
+              else {  // TODO: Resume tabs scrolling up, not working.
+                fixToTop(top);
+              }
             }
           }
           lastTop = top;
