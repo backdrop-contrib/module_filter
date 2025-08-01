@@ -330,28 +330,23 @@ Backdrop.behaviors.moduleFilterTabs = {
         $(window).on('scroll', function () {
           var top = $(window).scrollTop();
           var bottom = top + $(window).height();
-
           var modulesOffset = $modules.offset().top;
 
           if (modulesOffset >= top) {
             $tabs.removeClass('top-fixed bottom-fixed').attr('style', '');
           }
           else {
-            if (top > lastTop) { // Scrolling down
-              if ($tabs.outerHeight() > (bottom - top)) {
-                fixToBottom(bottom);
-              }
-              else {
-                fixToTop(top);
-              }
+            var scrollingUp = top < lastTop;
+
+            if (scrollingUp) {
+              $tabs.removeClass('top-fixed bottom-fixed').attr('style', '');
             }
-            else { // Scrolling up
-              if ($tabs.outerHeight() > (bottom - top)) {
-                fixToBottom(bottom);
-              }
-              else {  // TODO: Resume tabs scrolling up, not working.
-                fixToTop(top);
-              }
+
+            if ($tabs.outerHeight() > (bottom - top)) {
+              fixToBottom(bottom);
+            }
+            else {
+              fixToTop(top);
             }
           }
           lastTop = top;
