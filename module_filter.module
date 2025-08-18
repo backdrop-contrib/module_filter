@@ -63,13 +63,17 @@ function module_filter_menu() {
  * Implements hook_library_info().
  */
 function module_filter_library_info() {
-  // jQuery BBQ plugin.
+  // jQuery BBQ plugin, https://benalman.com/projects/jquery-bbq-plugin.
+  // Use updated version from https://github.com/yiisoft/yii framework/web/js.
   $libraries['jquery.bbq'] = array(
     'title' => 'jQuery BBQ',
-    'website' => 'http://benalman.com/projects/jquery-bbq-plugin/',
-    'version' => '1.2.1',
+    'website' => 'https://github.com/cowboy/jquery-bbq',
+    'version' => '1.4pre with extra changes',
     'js' => array(
-      drupal_get_path('module', 'module_filter') . '/js/jquery.ba-bbq.js' => array(),
+      backdrop_get_path('module', 'module_filter') . '/js/jquery.ba-bbq.min.js' => array(),
+    ),
+    'dependencies' => array(
+      array('system', 'jquery'),
     ),
   );
 
