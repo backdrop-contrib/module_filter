@@ -136,6 +136,32 @@ function theme_module_filter_system_modules_tabs($variables) {
         $module['description']['#markup'] = '<em>' . t('No description available.') . '</em>';
       }
       $description = '<span class="details"><span class="text">' . backdrop_render($module['description']) . '</span></span>';
+
+      // Show package and tags with description even when using tabs.
+      // TODO: Filter only searches module name. Modify to include Tags.
+      // Combine package and tags as "Tags:" label.
+      $info = $module_data[$key]->info;
+      $tags = array();
+
+      // Use package as first tag if available.
+      if (!empty($info['package'])) {
+        $tags[] = $info['package'];
+      }
+
+      // Add tags[] values if available.
+      if (!empty($info['tags']) && is_array($info['tags'])) {
+        $tags = array_merge($tags, $info['tags']);
+      }
+      elseif (!empty($info['tags']) && is_string($info['tags'])) {
+        $tags[] = $info['tags'];
+      }
+
+      // Only show if we have at least one tag.
+      if (!empty($tags)) {
+        $tag_line = implode(', ', $tags);
+        $description .= '<div class="admin-requirements tags">' . t('Tags: @tags', ['@tags' => $tag_line]) . '</div>';
+      }
+
       if (($version && !$version_column) || $show_path || $requires || $required_by) {
         $description .= '<div class="requirements">';
         if ($version && !$version_column) {
