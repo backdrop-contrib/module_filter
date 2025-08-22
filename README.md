@@ -124,6 +124,7 @@ Current Maintainers
 -------------------
 
 - [John Franklin](https://github.com/jlfranklin).
+- [izmeez](https://github.com/izmeez).
 - Seeking additional maintainers.
 
 Credits
