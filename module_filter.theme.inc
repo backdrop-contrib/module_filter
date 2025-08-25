@@ -21,7 +21,7 @@ function theme_module_filter($variables) {
 function theme_module_filter_system_modules_tabs($variables) {
   $config = config('module_filter.settings');
   if (module_exists('views_ui')) {
-    // Hack to get consistent style with views ctools dropbutton.
+    // Hack to get consistent style with views dropbutton.
     if (module_load_include('inc', 'views_ui', 'includes/admin')) {
       foreach (views_ui_get_admin_css() as $file => $options) {
         backdrop_add_css($file, $options);
