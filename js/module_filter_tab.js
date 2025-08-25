@@ -327,25 +327,23 @@ Backdrop.behaviors.moduleFilterTabs = {
         }
 
         var lastTop = 0;
-        $(window).on('scroll', function () {
-          var top = $(window).scrollTop();
-          var bottom = top + $(window).height();
-          var modulesOffset = $modules.offset().top;
+        $(window).scroll(function() {
+          var top = viewportTop();
+          var bottom = viewportBottom();
 
-          if (modulesOffset >= top) {
-            $tabs.removeClass('top-fixed bottom-fixed').attr('style', '');
+          if ($modules.offset().top >= top) {
+            $tabs.removeClass('top-fixed').attr('style', '');
           }
           else {
-            var scrollingUp = top < lastTop;
-
-            if (scrollingUp) {
-              $tabs.removeClass('top-fixed bottom-fixed').attr('style', '');
+            if (top > lastTop) { // Downward scroll.
+              if ($tabs.height() > bottom - top) {
+                fixToBottom(bottom);
+              }
+              else {
+                fixToTop(top);
+              }
             }
-
-            if ($tabs.outerHeight() > (bottom - top)) {
-              fixToBottom(bottom);
-            }
-            else {
+            else { // Upward scroll.
               fixToTop(top);
             }
           }
