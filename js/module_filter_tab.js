@@ -272,20 +272,6 @@ Backdrop.behaviors.moduleFilterTabs = {
           return tabsTopOffset;
         }
 
-        function viewportTop() {
-          var top = $(window).scrollTop();
-          return top;
-        }
-
-        function viewportBottom() {
-          var top = $(window).scrollTop();
-          var bottom = top + $(window).height();
-
-          bottom -= $('#page-actions').height();
-
-          return bottom;
-        }
-
         function fixToTop(top) {
           if ($tabs.hasClass('bottom-fixed')) {
             $tabs.css({
