@@ -60,6 +60,17 @@ function module_filter_menu() {
 }
 
 /**
+ * Implements hook_config_info().
+ */
+function module_filter_config_info() {
+  $prefixes['module_filter.settings'] = array(
+    'label' => t('Module filter settings'),
+    'group' => t('Configuration'),
+  );
+  return $prefixes;
+}
+
+/**
  * Implements hook_library_info().
  */
 function module_filter_library_info() {
