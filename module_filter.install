@@ -70,3 +70,16 @@ function module_filter_update_1000() {
     update_variable_del('module_filter_visual_aid');
   }
 }
+
+/**
+ * Migrate 'recent_modules' variable to configuration if it exists.
+ */
+function module_filter_update_1001() {
+  $recent = update_variable_get('module_filter_recent_modules');
+  if ($recent !== NULL) {
+    $config = config('module_filter.settings');
+    $config->set('recent_modules', $recent);
+    $config->save();
+    update_variable_del('module_filter_recent_modules');
+  }
+}
