@@ -120,6 +120,11 @@ Issues
 Bugs and Feature requests should be reported in the Issue Queue:
 https://github.com/backdrop-contrib/module_filter/issues.
 
+Known issues
+------------
+
+When browser view zoom is less than 100% the modules list does not display properly and requires scrolling down to view the list of modules, see https://github.com/backdrop-contrib/module_filter/issues/22
+
 Current Maintainers
 -------------------
 
