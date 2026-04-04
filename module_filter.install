@@ -28,7 +28,7 @@ function module_filter_update_last_removed() {
 }
 
 /**
- * Update Drupal 7 sites with module_filter module installed, convert variables
+ * Upgrade Drupal 7 sites with module_filter module installed, convert variables
  * to configuration.
  */
 function module_filter_update_1000() {
