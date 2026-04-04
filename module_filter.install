@@ -1,0 +1,85 @@
+<?php
+/**
+ * @file
+ * Install, update and uninstall functions for module_filter
+ */
+
+/**
+ * Implements hook_install().
+ */
+function module_filter_install() {
+  db_update('system')
+  ->fields(array('weight' => 0,))
+  ->condition('type', 'module')
+  ->condition('name', 'module_filter')
+  ->execute();
+}
+
+/**
+ * Implements hook_update_last_removed().
+ */
+function module_filter_update_last_removed() {
+  // Detect D7 upgrade by checking one variable.
+  $is_d7_upgrade = update_variable_get('module_filter_count_enabled') !== NULL;
+
+  if ($is_d7_upgrade) {
+    return 7201;
+  }
+}
+
+/**
+ * Upgrade Drupal 7 sites with module_filter module installed, convert variables
+ * to configuration.
+ */
+function module_filter_update_1000() {
+  $is_d7_upgrade = update_variable_get('module_filter_count_enabled') !== NULL;
+
+  if ($is_d7_upgrade) {
+    $config = config('module_filter.settings');
+    $config->set('count_enabled', update_variable_get('module_filter_count_enabled'));
+    $config->set('dynamic_save_position', update_variable_get('module_filter_dynamic_save_position'));
+    $config->set('expanded_description', update_variable_get('module_filter_expanded_description'));
+    $config->set('hide_empty_tabs', update_variable_get('module_filter_hide_empty_tabs'));
+    $config->set('recent_modules', update_variable_get('module_filter_track_recent_modules'));
+    $config->set('remember_active_tab', update_variable_get('module_filter_remember_active_tab'));
+    $config->set('remember_update_state', update_variable_get('module_filter_remember_update_state'));
+    $config->set('set_focus', update_variable_get('module_filter_set_focus'));
+    $config->set('show_path', update_variable_get('module_filter_show_path'));
+    $config->set('update_status_alter', update_variable_get('module_filter_update_status_alter'));
+    $config->set('use_switch', update_variable_get('module_filter_use_switch'));
+    $config->set('use_tabs', update_variable_get('module_filter_tabs'));
+    $config->set('use_url_fragment', update_variable_get('module_filter_use_url_fragment'));
+    $config->set('version_column', update_variable_get('module_filter_version_column'));
+    $config->set('visual_aid', update_variable_get('module_filter_visual_aid'));
+    $config->save();
+
+    update_variable_del('module_filter_count_enabled');
+    update_variable_del('module_filter_dynamic_save_position');
+    update_variable_del('module_filter_expanded_description');
+    update_variable_del('module_filter_hide_empty_tabs');
+    update_variable_del('module_filter_track_recent_modules');
+    update_variable_del('module_filter_remember_active_tab');
+    update_variable_del('module_filter_remember_update_state');
+    update_variable_del('module_filter_set_focus');
+    update_variable_del('module_filter_show_path');
+    update_variable_del('module_filter_update_status_alter');
+    update_variable_del('module_filter_use_switch');
+    update_variable_del('module_filter_tabs');
+    update_variable_del('module_filter_use_url_fragment');
+    update_variable_del('module_filter_version_column');
+    update_variable_del('module_filter_visual_aid');
+  }
+}
+
+/**
+ * Migrate 'recent_modules' variable to configuration if it exists.
+ */
+function module_filter_update_1001() {
+  $recent = update_variable_get('module_filter_recent_modules');
+  if ($recent !== NULL) {
+    $config = config('module_filter.settings');
+    $config->set('recent_modules', $recent);
+    $config->save();
+    update_variable_del('module_filter_recent_modules');
+  }
+}

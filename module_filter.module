@@ -287,7 +287,8 @@ function module_filter_system_modules_submit_redirect($form, &$form_state) {
  * Form submission handler to track recently enabled/disabled modules
  */
 function module_filter_system_modules_submit_recent($form, &$form_state) {
-  $recent_modules = config_get('module_filter.settings', 'recent_modules');
+  $config = config('module_filter.settings');
+  $recent_modules = $config->get('recent_modules');
 
   foreach ($form_state['values']['modules'] as $package => $modules) {
     foreach ($modules as $key => $module) {
@@ -297,7 +298,10 @@ function module_filter_system_modules_submit_recent($form, &$form_state) {
     }
   }
 
-  variable_set('module_filter_recent_modules', $recent_modules);
+  $config->set('recent_modules', $recent_modules);
+
+  $config->save();
+  backdrop_set_message(t('Recently enabled/disabled modules saved.'));
 }
 
 /**
