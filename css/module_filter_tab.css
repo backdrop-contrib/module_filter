@@ -114,7 +114,7 @@ html.js .module-filter-inputs-wrapper input[name="module_filter[name]"] {
   width: 50%;
 }
 html.js #module-filter-modules {
-  margin-left: 240px;
+  margin-left: 16rem;
   border: 1px solid #ccc;
 }
 #module-filter-modules table {
