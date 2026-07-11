@@ -65,6 +65,18 @@ Backdrop.behaviors.moduleFilter = {
               item.unavailable = true;
             }
             return item;
+          },
+          function(moduleFilter, item) {
+            // Extend the default (un-prefixed) filter text to also match
+            // the module description and its package/tags, mirroring the
+            // behavior of Backdrop core's modules page filter. The
+            // "requirements" block (version, path, schema version,
+            // requires, required by) is intentionally left out, matching
+            // core's table-filter-text-source markup.
+            var $description = $('.description', item.element).clone();
+            $('.requirements', $description).remove();
+            item.text += ' ' + $description.text().toLowerCase();
+            return item;
           }
         ],
         showEnabled: $('#edit-module-filter-show-enabled').is(':checked'),

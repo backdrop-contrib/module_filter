@@ -6,22 +6,36 @@ as for filtering projects on the update status report.
 
 The supplied filter is simpler than using your browsers find feature which
 searches the entire page. The provided filter will filter modules/projects that
-do not meet your input.
+meet your input.
 
-Along with the filter textfield there are additional
-checkboxes that help to narrow the search more. The modules page contains four
-checkboxes: Enabled, Disabled, Required, and Unavailable. While the first two
-are self-explanatory, the latter two can take an explanation. The Required
-checkbox affects visibility of modules that are enabled and have other
-module(s) that require it also enabled. The Unavailable checkbox affects
-visibility of modules that are disabled and depend on module(s) that are
-missing.
+On the modules page, plain text you type into the filter is matched against
+the module name, description, package, and tags; a module is shown if any of
+those fields contain your search text.
+
+To search a single field instead of all of them, prefix your search text with
+the field name and a colon:
+
+- `description:spam` matches only the description text.
+- `requires:token` matches only modules that this module requires.
+- `requiredBy:views` matches only modules that require this module.
+
+You can combine multiple terms, separated by spaces, e.g. `token requires:views`
+matches modules with "token" in their name, description, or tags, or that
+require the Views module. A module is shown if it matches any one of the
+terms (not all of them).
+
+Along with the filter textfield there are additional checkboxes that help to
+narrow the search more. The modules page contains four checkboxes: Enabled,
+Disabled, Required, and Unavailable. While the first two are self-explanatory,
+the latter two can take an explanation. The Required checkbox affects visibility
+of modules that are enabled and have other module(s) that require it also
+enabled. The Unavailable checkbox affects visibility of modules that are
+disabled and depend on module(s) that are missing.
 
 The update status report filter also contains four checkboxes: Up-to-Date,
 Update available, Security update, and Unknown. These directly affect the
 visibility of each project; whether it is up-to-date, there is an update
 available, a security update is available, or the status is unknown.
-
 
 Requirements
 ------------
@@ -138,4 +152,3 @@ License
 
 This project is GPL v2 software.
 See the LICENSE.txt file in this directory for complete text.
-

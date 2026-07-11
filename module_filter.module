@@ -114,6 +114,7 @@ function module_filter_form_system_modules_alter(&$form, &$form_state, $form_id)
   $config = config('module_filter.settings');
   $form['module_filter'] = array(
     '#type' => 'module_filter',
+    '#description' => t('Filter list by module name, description, package, or tags.'),
     '#attached' => array(
       'js' => array(
         backdrop_get_path('module', 'module_filter') . '/js/modules.js' => array('weight' => 1),
