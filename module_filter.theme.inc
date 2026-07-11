@@ -135,7 +135,6 @@ function theme_module_filter_system_modules_tabs($variables) {
       $description = '<span class="details"><span class="text">' . backdrop_render($module['description']) . '</span></span>';
 
       // Show package and tags with description even when using tabs.
-      // TODO: Filter only searches module name. Modify to include Tags.
       // Combine package and tags as "Tags:" label.
       $info = $module_data[$key]->info;
       $tags = array();
@@ -159,7 +158,11 @@ function theme_module_filter_system_modules_tabs($variables) {
         $description .= '<div class="admin-requirements tags">' . t('Tags: @tags', ['@tags' => $tag_line]) . '</div>';
       }
 
-      if (($version && !$version_column) || $show_path || $requires || $required_by) {
+      // Link to the project page on BackdropCMS.org and GitHub, if the module
+      // includes project machine name in its .info file from packaging script.
+      $project = (!empty($info['project']) && $info['project'] != 'backdrop') ? $info['project'] : '';
+
+      if (($version && !$version_column) || $show_path || $requires || $required_by || $project) {
         $description .= '<div class="requirements">';
         if ($version && !$version_column) {
           $description .= '<div class="admin-requirements">' . t('Version: !module-version', array('!module-version' => backdrop_render($module['version']))) . '</div>';
@@ -178,6 +181,9 @@ function theme_module_filter_system_modules_tabs($variables) {
         }
         if ($required_by) {
           $description .= '<div class="admin-requirements">' . t('Required by: !module-list', array('!module-list' => implode(', ', $module['#required_by']))) . '</div>';
+        }
+        if ($project) {
+          $description .= '<div class="admin-requirements project-links">' . t('Links:') . ' ' . l(t('BackdropCMS.org'), 'https://backdropcms.org/project/' . $project) . ', ' . l(t('GitHub'), 'https://github.com/backdrop-contrib/' . $project) . '</div>';
         }
         $description .= '</div>';
       }
