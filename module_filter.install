@@ -83,3 +83,18 @@ function module_filter_update_1001() {
     update_variable_del('module_filter_recent_modules');
   }
 }
+
+/**
+ * Migrate 'recent_modules' from configuration to state data.
+ */
+function module_filter_update_1002() {
+  $config = config('module_filter.settings');
+  $recent_modules = $config->get('recent_modules');
+
+  if (!empty($recent_modules) && is_array($recent_modules)) {
+    state_set('module_filter_recent_modules', $recent_modules);
+  }
+
+  $config->clear('recent_modules');
+  $config->save();
+}
