@@ -3,9 +3,10 @@
 }
 
 #module-filter-tabs {
-  float: left;
+  float: none;
 }
 #module-filter-tabs ul {
+  display: none;
   width: 239px;
   list-style: none;
   list-style-image: none;
@@ -114,7 +115,6 @@ html.js .module-filter-inputs-wrapper input[name="module_filter[name]"] {
   width: 50%;
 }
 html.js #module-filter-modules {
-  margin-left: 16rem;
   border: 1px solid #ccc;
 }
 #module-filter-modules table {
@@ -254,4 +254,42 @@ html.js .toggle-enable.off div {
 #module-filter-tabs.bottom-fixed {
   position: fixed;
   bottom: 0;
+}
+
+/**
+ * Vertical tabs take up too much horizontal space to be usable on narrow
+ * (phone-width) screens, so they are hidden by default above. Restore the
+ * floated sidebar layout at tablet width and up, matching the breakpoint
+ * Backdrop core itself uses for vertical tabs (core/misc/vertical-tabs.css).
+ */
+@media (min-width: 750px) {
+  #module-filter-tabs {
+    float: left;
+  }
+  #module-filter-tabs ul {
+    display: block;
+  }
+  html.js #module-filter-modules {
+    margin-left: 16rem;
+  }
+}
+
+/**
+ * The "Version" column is too wide to fit alongside the rest of the row on
+ * narrow screens, so hide it and show the version inline in the
+ * description instead (see module_filter.theme.inc). Restore the column,
+ * and hide the inline duplicate, at the same breakpoint as the tabs above.
+ */
+#module-filter-modules td.version,
+#module-filter-modules th.version {
+  display: none;
+}
+@media (min-width: 750px) {
+  #module-filter-modules td.version,
+  #module-filter-modules th.version {
+    display: table-cell;
+  }
+  .version-inline.version-column-enabled {
+    display: none;
+  }
 }
