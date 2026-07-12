@@ -122,10 +122,16 @@ requires:
    Filter based on what a module requires.
 
 Multiple filters (or queries) can be applied by space delimiting. For example,
-the filter string 'description:ctools views' would filter down to modules with
-"ctools" in the description and "views" within the module's name. To pass a
-space within a single query wrap it within double quotes (e.g. 'requires:"chaos
-tools"' or '"bulk export"').
+the filter string 'token requires:views' would filter down to modules with
+"token" in the description and "views" in the requires field. To pass a
+space within a single query wrap it within double quotes (e.g. 'requires:"meta
+views"' or '"bulk export"').
+
+Mobile devices
+--------------
+On mobile devices and narrow screens the Tabs are not displayed, the dynamic
+`Save configuration` button becomes static and a separate version column is not
+displayed, regardless of settings. These elements are present on wider displays.
 
 Documentation
 -------------
@@ -143,7 +149,7 @@ Current Maintainers
 -------------------
 
 - [John Franklin](https://github.com/jlfranklin).
-- [izmeez](https://github.com/izmeez).
+- [izmeez](https://github.com/izmeez) - Assisted-by: LLM agent.
 - Seeking additional maintainers.
 
 Credits
