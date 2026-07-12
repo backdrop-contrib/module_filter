@@ -1,8 +1,12 @@
 Module Filter
 =============
 
+This module provides more features than Backdrop core where the modules list
+page includes a filter input search.
+
 This module provides a method for filtering modules on the modules page as well
-as for filtering projects on the update status report.
+as for filtering projects on the update status report, and an enhanced filter on
+the user permissions page.
 
 The supplied filter is simpler than using your browsers find feature which
 searches the entire page. The provided filter will filter modules/projects that
