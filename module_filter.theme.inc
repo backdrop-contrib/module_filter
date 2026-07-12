@@ -100,6 +100,7 @@ function theme_module_filter_system_modules_tabs($variables) {
       $row = array();
 
       $version = !empty($module['version']['#markup']);
+      $version_markup = ($version) ? backdrop_render($module['version']) : '';
       $version_column = $config->get('version_column');
       $show_path = $config->get('show_path');
       $requires = !empty($module['#requires']);
@@ -122,10 +123,10 @@ function theme_module_filter_system_modules_tabs($variables) {
       }
       $row[] = array('class' => array('name'), 'data' => $label . '><strong>' . backdrop_render($module['name']) . '</strong> <span class="module-machine-name">(' . $key . ')</span></label>');
 
-      if ($config->get('version_column')) {
+      if ($version_column) {
         // Need something in the array slot, even if version is empty, otherwise
         // the rest of the cells are shifted to the left.
-        $row[] = array('class' => array('version'), 'data' => backdrop_render($module['version']));
+        $row[] = array('class' => array('version'), 'data' => $version_markup);
       }
 
       // Add the description, along with any modules it requires.
@@ -162,10 +163,19 @@ function theme_module_filter_system_modules_tabs($variables) {
       // includes project machine name in its .info file from packaging script.
       $project = (!empty($info['project']) && $info['project'] != 'backdrop') ? $info['project'] : '';
 
-      if (($version && !$version_column) || $show_path || $requires || $required_by || $project) {
+      if ($version || $show_path || $requires || $required_by || $project) {
         $description .= '<div class="requirements">';
-        if ($version && !$version_column) {
-          $description .= '<div class="admin-requirements">' . t('Version: !module-version', array('!module-version' => backdrop_render($module['version']))) . '</div>';
+        if ($version) {
+          // Always render the inline version text (in addition to the
+          // dedicated version column, when enabled below) so a version is
+          // still visible on narrow screens, where the version column is
+          // hidden. The "version-column-enabled" class lets CSS hide this
+          // duplicate once the column itself becomes visible.
+          $version_class = 'admin-requirements version-inline';
+          if ($version_column) {
+            $version_class .= ' version-column-enabled';
+          }
+          $description .= '<div class="' . $version_class . '">' . t('Version: !module-version', array('!module-version' => $version_markup)) . '</div>';
         }
         if ($show_path) {
           $module_path = backdrop_get_path('module', $key);

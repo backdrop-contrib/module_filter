@@ -5,6 +5,15 @@ Backdrop.ModuleFilter.tabs = {};
 Backdrop.ModuleFilter.enabling = {};
 Backdrop.ModuleFilter.disabling = {};
 
+// Whether the vertical tabs sidebar is visible at the current viewport
+// width; see the breakpoint in css/module_filter_tab.css. DOM-visibility
+// checks (e.g. $tabs.is(':visible')) are not reliable here, since
+// dynamic_position.js may append visible content (the submit button)
+// into #module-filter-tabs even when its tab list is hidden.
+Backdrop.ModuleFilter.tabsVisible = function() {
+  return !window.matchMedia || window.matchMedia('(min-width: 750px)').matches;
+};
+
 Backdrop.ModuleFilter.jQueryIsNewer = function() {
   if (Backdrop.ModuleFilter.jQueryNewer == undefined) {
     var v1parts = $.fn.jquery.split('.');
@@ -312,20 +321,33 @@ Backdrop.behaviors.moduleFilterTabs = {
           }
         }
 
+        function resetStickyPosition() {
+          $tabs.removeClass('top-fixed bottom-fixed').attr('style', '');
+        }
+
         var lastTop = 0;
-        $(window).on('scroll', function () {
+        function handleTabsStickyPosition() {
+          // The tabs are hidden on narrow screens; make sure nothing is
+          // left fixed in place from a wider viewport and skip the
+          // positioning math entirely.
+          if (!Backdrop.ModuleFilter.tabsVisible()) {
+            resetStickyPosition();
+            lastTop = $(window).scrollTop();
+            return;
+          }
+
           var top = $(window).scrollTop();
           var bottom = top + $(window).height();
           var modulesOffset = $modules.offset().top;
 
           if (modulesOffset >= top) {
-            $tabs.removeClass('top-fixed bottom-fixed').attr('style', '');
+            resetStickyPosition();
           }
           else {
             var scrollingUp = top < lastTop;
 
             if (scrollingUp) {
-              $tabs.removeClass('top-fixed bottom-fixed').attr('style', '');
+              resetStickyPosition();
             }
 
             if ($tabs.outerHeight() > (bottom - top)) {
@@ -336,7 +358,10 @@ Backdrop.behaviors.moduleFilterTabs = {
             }
           }
           lastTop = top;
-        });
+        }
+
+        $(window).on('scroll', handleTabsStickyPosition);
+        $(window).on('resize', handleTabsStickyPosition);
 
         moduleFilter.adjustHeight();
       });
