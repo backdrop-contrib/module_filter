@@ -98,3 +98,15 @@ function module_filter_update_1002() {
   $config->clear('recent_modules');
   $config->save();
 }
+
+/**
+ * Enable the new "Enhance User Permissions page" setting.
+ *
+ * For existing sites preserve the always-on behavior they had before this
+ * setting existed.
+ */
+function module_filter_update_1003() {
+  $config = config('module_filter.settings');
+  $config->set('permissions_alter', 1);
+  $config->save();
+}

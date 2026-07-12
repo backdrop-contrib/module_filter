@@ -14,6 +14,7 @@
     "expanded_description": 0,
     "show_path": 0,
     "update_status_alter": 1,
+    "permissions_alter": 1,
     "remember_active_tab": 0,
     "remember_update_state": 0
 }

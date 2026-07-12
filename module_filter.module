@@ -163,6 +163,17 @@ function module_filter_form_system_modules_alter(&$form, &$form_state, $form_id)
  * Implements hook_form_FORM_ID_alter().
  */
 function module_filter_form_user_admin_permissions_alter(&$form, &$form_state) {
+  if (!config_get('module_filter.settings', 'permissions_alter')) {
+    return;
+  }
+
+  // Backdrop core (since 1.24.0) provides its own JS-only filter on this
+  // form as $form['filter']. Disable it so it doesn't show alongside the
+  // filter added below.
+  if (isset($form['filter'])) {
+    $form['filter']['#access'] = FALSE;
+  }
+
   $form['module_filter'] = array(
     '#type' => 'module_filter',
     '#description' => t('Filter list by module. Use the query operator "perm" to filter by permission, e.g., perm:access.'),

@@ -104,6 +104,19 @@ function module_filter_settings() {
     '#default_value' => $config->get('show_path'),
   );
 
+  $form['permissions'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Permissions'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
+  $form['permissions']['permissions_alter'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enhance User Permissions page'),
+    '#description' => t('Allow module filter module to make enhancements to the user permissions page. When enabled, the default filter provided by Backdrop core (since Backdrop 1.24.0) is disabled in favor of the filter provided by this module, to avoid showing two filters.'),
+    '#default_value' => $config->get('permissions_alter'),
+  );
+
   $form['update'] = array(
     '#type' => 'fieldset',
     '#title' => t('Update status'),
