@@ -12,12 +12,17 @@ On the modules page, plain text you type into the filter is matched against
 the module name, description, package, and tags; a module is shown if any of
 those fields contain your search text.
 
+Some module names may coincide with words commonly found in descriptions and to
+narrow the filtered results to a specific module may require entering a term
+related to the machine name of the module, e.g. `module_` will narrow results to
+`module_filter`.
+
 To search a single field instead of all of them, prefix your search text with
 the field name and a colon:
 
 - `description:spam` matches only the description text.
-- `requires:token` matches only modules that this module requires.
-- `requiredBy:views` matches only modules that require this module.
+- `requires:token` matches only modules that require modules with this term.
+- `requiredBy:views` matches only modules that are required by modules with this term.
 
 You can combine multiple terms, separated by spaces, e.g. `token requires:views`
 matches modules with "token" in their name, description, or tags, or that
